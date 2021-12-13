@@ -1,0 +1,40 @@
+package com.rakki.mapper;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.rakki.domain.PriceListVo;
+import com.rakki.domain.SellVo;
+
+public interface SellBuyMapper {
+	
+	//상품품목키, 사이즈별 구입 가격리스트 취득
+	PriceListVo getBuyPriceList(Long product_no);
+	
+	//상품품목키, 사이즈별 판매 가격리스트 취득
+	PriceListVo getSellPriceList(Long product_no);
+	//판매 체크용 화면 정보취득
+	PriceListVo getSellCheck(Long product_no);
+	
+	//판매 확인용 화면 정보취득
+	PriceListVo getSellConfirm(@Param("product_no") Long product_no,@Param("size_type") String size_types);
+	
+	//판매입찰,즉시판매 등록용
+	void insertSellGoods(SellVo sell);
+	
+	//즉시판매 등록용
+	void insertSellTrade(SellVo sell);
+	
+	//판매입찰용
+	void insertSellGoods_NullTradeNo(SellVo sell);
+	
+	long getBuyGoodsNo(SellVo sell);
+
+	void updateBuyGoods(SellVo sell);
+
+	//판매자 상품등록번호 취득
+	Long getNewSellerGoodsNo();
+
+	//거래번호 취득
+	Long getNewTradeNo();
+}
+

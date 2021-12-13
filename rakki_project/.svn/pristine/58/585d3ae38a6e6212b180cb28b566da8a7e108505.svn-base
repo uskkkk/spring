@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rakki.mapper.TradeMapper">
+	<select id="getOnTradeList" resultType="trade">
+		SELECT TRADENO, NAME_KO NAME,
+		(SELECT TO_CHAR(PRICE, '999,999,999') FROM TBL_GOODS WHERE GOODS_NO=7) AS PRICE
+		, TRADE_DATE, SELL_STAT, BUY_STAT 
+		FROM TBL_TRADE 
+		NATURAL JOIN TBL_PRODUCT
+		WHERE NOT SELL_STAT = '정산완료' AND NOT BUY_STAT = '배송완료' AND TRADENO > 0
+	</select>
+	
+	<select id="getListWithPaging" resultType="trade">
+		SELECT TRADENO, NAME, PRICE
+		, TRADE_DATE, SELL_STAT, BUY_STAT 
+		FROM
+		(
+			SELECT  
+				/*+ INDEX_DESC(TBL_TRADE PK_TRADE) */
+				ROWNUM RN,TRADENO, NAME_KO NAME,
+				(SELECT TO_CHAR(PRICE, '999,999,999') FROM TBL_GOODS WHERE GOODS_NO=7) AS PRICE
+				, TRADE_DATE, SELL_STAT, BUY_STAT 
+			FROM 
+				TBL_TRADE
+			NATURAL JOIN TBL_PRODUCT
+			WHERE 
+				<include refid="cri" />			
+				NOT SELL_STAT = '정산완료' AND NOT BUY_STAT = '배송완료' AND ROWNUM &lt;= #{pageNum} * #{amount} 
+		)
+		WHERE RN > (#{pageNum} - 1) * #{amount} 
+	</select>
+	
+	<select id="getTotalCount" resultType="int">
+		SELECT COUNT(*) FROM TBL_TRADE WHERE
+		<include refid="cri" />		 
+		NOT SELL_STAT = '정산완료' AND NOT BUY_STAT = '배송완료' AND TRADENO > 0
+	</select>	
+	
+	<sql id="cri">
+		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+			<foreach collection="typeArr" item="type">
+				<trim  prefix="OR">
+					<choose>
+						<when test="type == 'B'.toString()">
+							BRAND LIKE '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'M'.toString()">
+							CONTENT SEREALNO '%${keyword}%'
+						</when>
+						<when test="type == 'E'.toString()">
+							NAME_EN LIKE '%${keyword}%'
+						</when>
+						<when test="type == 'K'.toString()">
+							NAME_KO LIKE '%${keyword}%'
+						</when>
+					</choose>
+				</trim>
+			
+			</foreach>
+		</trim>	
+	</sql>		
+	
+</mapper>

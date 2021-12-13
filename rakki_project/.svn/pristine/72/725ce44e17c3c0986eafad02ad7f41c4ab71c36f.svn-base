@@ -1,0 +1,97 @@
+package com.rakki.service;
+
+
+import java.sql.Driver;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.By.ByClassName;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriver.Options;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.remote.BrowserType;
+import org.openqa.selenium.remote.DriverCommand;
+
+import com.sun.xml.internal.ws.server.DraconianValidationErrorHandler;
+
+public class SeleniumTest {
+	private final String WEB_DRIVER_ID = "webdriver.chrome.driver";
+	private final String WEB_DRIVER_PATH = "G:\\tools\\chromedriver.exe";
+	private String url = "https://kream.co.kr/search?category_id=1&sort=popular&per_page=40";
+//	private String url = "http://localhost:8080/customLogin";
+//	private String url = "http://localhost:8080/board/list";
+	
+	private WebDriver driver;
+	
+	
+	public SeleniumTest(){
+		System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
+		driver = new ChromeDriver();
+		
+	}
+	
+	public static void main(String[] args) throws InterruptedException {
+		SeleniumTest test = new SeleniumTest();
+		test.crawl();
+		
+	}
+	
+	public void crawl() throws InterruptedException {
+		driver.get(url);
+		
+//		int listCount = driver.findElements(By.cssSelector(".search_result_list .search_result_item")).size();
+//		System.out.println(listCount);
+		
+		
+		// 
+		for(int i = 0; i < 100; i++){
+			//페이지의 a태그 href 값 가져옴
+//			String product = driver.findElements(By.cssSelector(".search_result_list .search_result_item")).get(i).findElement(select("a")).getAttribute("href");
+			//href의 값 이동
+			WebElement product = driver.findElements(By.cssSelector(".search_result_list .search_result_item")).get(i);
+			product.findElement(By.cssSelector("a")).click();
+			
+			//페이지 로딩 대기
+			Thread.sleep(3000);
+				
+			// 이미지 박스의 첫번째 src 값을 가져옴
+			String image = driver.findElements(By.cssSelector(".slide_item .item_inner .product")).get(0).findElement(select("img")).getAttribute("src");
+			String brand = driver.findElement(By.cssSelector(".brand")).getText();
+			String nameKo = driver.findElement(By.cssSelector(".sub_title")).getText();
+			String nameEn = driver.findElement(By.cssSelector(".title")).getText();
+			String serialNo = driver.findElements(By.cssSelector(".detail_product .detail_box")).get(0).findElement(select("dd")).getText();
+			String release = driver.findElements(By.cssSelector(".detail_product .detail_box")).get(1).findElement(select("dd")).getText();
+			String color = driver.findElements(By.cssSelector(".detail_product .detail_box")).get(2).findElement(select("dd")).getText();
+			String priceRel = driver.findElements(By.cssSelector(".detail_product .detail_box")).get(3).findElement(select("dd")).getText();
+			
+			System.out.println(image);
+			System.out.println(brand);
+			System.out.println(nameKo);
+			System.out.println(nameEn);
+			System.out.println(serialNo);
+			System.out.println(release);
+			System.out.println(color);
+			System.out.println(priceRel);
+			System.out.println(i+1 +"번째");
+			
+			//url로 이동
+			driver.navigate().back();
+			Thread.sleep(2500);	
+			if(i+1 >= 40){
+				driver.findElement(By.cssSelector("body")).sendKeys(Keys.END);
+				Thread.sleep(3000);
+				driver.findElement(By.cssSelector("body")).sendKeys(Keys.HOME);
+				Thread.sleep(3000);
+			}
+		}
+		
+	}
+	static By select(String selector){
+		return By.cssSelector(selector);
+	}
+}

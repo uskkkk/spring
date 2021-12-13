@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rakki.mapper.SellingMapper">
+		
+	<select id="getSellingCount" resultType="countlist">
+		SELECT 
+		  (SELECT COUNT(*) FROM TBL_GOODS WHERE  STATUS = '1' AND GOODS_STAT = '0' AND ID = #{id} ) AS COUNT1,
+		  (SELECT COUNT(*) FROM TBL_TRADE WHERE  SELLER_GOODS_NO IN ( SELECT GOODS_NO FROM TBL_GOODS WHERE STATUS = '1' AND GOODS_STAT = '1' AND ID = #{id} ) AND SELL_STAT NOT IN ('정산완료') ) AS COUNT2,
+		  (SELECT COUNT(*) FROM TBL_TRADE WHERE  SELLER_GOODS_NO IN ( SELECT GOODS_NO FROM TBL_GOODS WHERE STATUS = '1' AND GOODS_STAT = '1' AND ID = #{id} ) AND SELL_STAT IN ('정산완료') ) AS COUNT3
+	    FROM DUAL	  
+	</select>	
+	
+	<select id="getSellingList" resultType="sellinglist">
+        SELECT ROWNUM NO, ID, NAME_EN, IMAGE, SIZE_TYPE, PRICE, REGDATE, TRADE_DATE, NVL(C.SELL_STAT,'판매입찰') SELL_STAT
+		FROM
+			(SELECT A.PRODUCT_NO, ID, NAME_EN, IMAGE, SIZE_TYPE, PRICE, REGDATE, TRADE_DATE, SELL_STAT   
+				FROM TBL_GOODS A
+				LEFT OUTER JOIN TBL_TRADE B ON (A.GOODS_NO = B.SELLER_GOODS_NO) 
+                LEFT OUTER JOIN TBL_PRODUCT C ON (A.PRODUCT_NO = C.PRODUCT_NO)
+				WHERE A.STATUS = '1' AND A.ID = #{id}  ORDER BY REGDATE ASC) C	  
+	</select>	
+	
+		
+</mapper>

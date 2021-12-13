@@ -1,0 +1,13 @@
+package com.rakki.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import com.rakki.domain.AddressVo;
+
+public interface AddressMapper {
+	/* 2021-11-03
+	 * 주소록 추가 
+	 * */
+	void insertAddress(AddressVo vo);
+}

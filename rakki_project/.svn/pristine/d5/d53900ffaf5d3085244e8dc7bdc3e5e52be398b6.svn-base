@@ -1,0 +1,121 @@
+package com.rakki.mapper;
+
+import static org.junit.Assert.assertNotNull;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.rakki.domain.Criteria;
+import com.rakki.domain.ProductVo;
+
+import lombok.Setter;
+import lombok.extern.log4j.Log4j;
+
+
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
+@Log4j
+public class ProductMapperTests {
+
+	@Autowired @Setter
+	private ProductMapper mapper;
+	
+	@Test
+	public void testExists() {
+		assertNotNull(mapper);
+		log.info(mapper);
+	}
+	
+	@Test
+	public void testGetList() {
+//		log.info(mapper.getClass().getName());	
+		//mapper.getList().forEach(System.out::println);
+		
+		log.info(mapper.getList());
+	}
+	
+	@Test
+	public void testGetPno(){
+		log.info(mapper.getLastPno());
+	}
+	
+	@Test
+	public void testUpdateImage(){
+		String pk = "12341234";
+		Long product_no = 242L; 
+		mapper.updateImage(pk, product_no);
+	}
+	
+	@Test
+	public void testGetListPaging() {
+		Criteria cri = new Criteria(1,10);
+		mapper.getListWithPaging(cri).forEach(log::info);
+	}
+	
+	@Test 
+	public void testGetTotalCount() {
+		Criteria cri = new Criteria(1,10);
+		cri.setType("B");
+		cri.setKeyword("Re");		
+		log.info(mapper.getTotalCount(cri));	
+			
+	}
+	
+	@Test
+	public void testGetListPaging2() {
+		Criteria cri = new Criteria(1,10);
+		cri.setType("B");
+		cri.setKeyword("Re");
+		mapper.getListWithPaging(cri).forEach(log::info);
+	}
+	
+	@Test
+	public void insertSelectKey() throws ParseException {
+		ProductVo productVo = new ProductVo();
+		productVo.setBrand("Rakki");
+		productVo.setCategory("1");
+		productVo.setSerialNo("seri-002");
+		productVo.setImage("https://kream-phinf.pstatic.net/MjAyMTEwMTlfMzAw/MDAxNjM0NjI5MTcyMTI4.bPOAsPMygLx0mfpGU_FZZKuortsOPW2Gn0cg1_DziKog.NiL00icrBRDiserYB5hXW6IWREtTV2BWiCh7kH8MFOIg.PNG/a_73ee4b0946c64548bb160fa47ef99748.png?type=m");
+		productVo.setColor("black,pink");
+		productVo.setName_ko("한글이름");
+		productVo.setName_en("English name");
+		productVo.setPrice_rel("45000");
+		productVo.setRelease(new SimpleDateFormat("yy-MM-dd").parse("21-03-01"));
+		log.info(productVo);
+		mapper.insertSelectKey(productVo);
+	}
+	
+	@Test
+	public void testInsertProduct() throws ParseException {
+		ProductVo productVo = new ProductVo();
+		productVo.setBrand("Rakki");
+		productVo.setCategory("1");
+		productVo.setSerialNo("seri-002");
+		productVo.setImage("https://kream-phinf.pstatic.net/MjAyMTEwMTlfMzAw/MDAxNjM0NjI5MTcyMTI4.bPOAsPMygLx0mfpGU_FZZKuortsOPW2Gn0cg1_DziKog.NiL00icrBRDiserYB5hXW6IWREtTV2BWiCh7kH8MFOIg.PNG/a_73ee4b0946c64548bb160fa47ef99748.png?type=m");
+		productVo.setColor("black,pink");
+		productVo.setName_ko("한글이름");
+		productVo.setName_en("English name");
+		productVo.setPrice_rel("45000");
+		productVo.setRelease(new SimpleDateFormat("yy-MM-dd").parse("21-03-01"));
+		log.info(productVo);
+		mapper.insertProduct(productVo);
+	}
+
+	
+	@Test
+	public void testGetProductInfo() {
+		Criteria cri = new Criteria(1,10);
+		cri.setType("B");
+		cri.setKeyword("Re");
+		log.info(mapper.getProductInfo(361L));
+	}
+	
+	
+}

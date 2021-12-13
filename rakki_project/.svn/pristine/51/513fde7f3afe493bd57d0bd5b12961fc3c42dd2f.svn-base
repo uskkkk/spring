@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rakki.mapper.SalesMapper">
+	<select id="yearIncome" resultType="map">
+		SELECT TO_CHAR(TRADE_DATE, 'YYYY') YEAR, SUM(S.PRICE) INCOME
+		    FROM TBL_TRADE T
+		    LEFT OUTER JOIN TBL_GOODS S ON T.SELLER_GOODS_NO = S.GOODS_NO
+		    WHERE TO_CHAR(TRADE_DATE, 'YYYY') = #{year}
+		    GROUP BY TO_CHAR(TRADE_DATE, 'YYYY')
+	</select>
+	
+	<select id="monthIncome" resultType="map">
+		SELECT MONTH, NVL(INCOME,0) INCOME
+			FROM
+			    (SELECT TO_NUMBER(TO_CHAR(TRADE_DATE, 'MM')) MONTH, SUM(S.PRICE) INCOME
+			    FROM TBL_TRADE T
+			    LEFT OUTER JOIN TBL_GOODS S ON T.SELLER_GOODS_NO = S.GOODS_NO
+			    WHERE TO_CHAR(TRADE_DATE, 'YYYY') = #{year}
+			    GROUP BY TO_NUMBER(TO_CHAR(TRADE_DATE, 'MM'))) A
+			RIGHT JOIN
+			    (SELECT ROWNUM MONTH
+			    FROM DICT
+			    WHERE ROWNUM &lt; = 12) B
+			USING(MONTH)
+			ORDER BY 1
+	</select>
+	
+	<select id="dayIncome" resultType="map">
+		SELECT DAY, NVL(INCOME,0) INCOME 
+			FROM
+			(SELECT TO_NUMBER(TO_CHAR(TRADE_DATE, 'DD')) DAY, SUM(S.PRICE) INCOME
+			    FROM TBL_TRADE T
+			    LEFT OUTER JOIN TBL_GOODS S ON T.SELLER_GOODS_NO = S.GOODS_NO
+			    WHERE TO_CHAR(TRADE_DATE, 'MM') = #{month}
+			    GROUP BY TO_NUMBER(TO_CHAR(TRADE_DATE, 'DD'))) A
+			RIGHT JOIN
+			(SELECT ROWNUM DAY
+			    FROM DICT
+			    WHERE ROWNUM &lt; = 31) B
+			USING(DAY)
+			ORDER BY 1
+	</select>
+</mapper>

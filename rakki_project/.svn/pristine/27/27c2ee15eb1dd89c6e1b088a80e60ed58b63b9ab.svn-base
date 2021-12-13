@@ -1,0 +1,12 @@
+package com.rakki.mapper;
+
+import java.util.Map;
+
+import com.rakki.domain.MemberVo;
+
+public interface MemberMapper {
+	public void register (MemberVo member);
+	void insertAuth(Map<String, Object> map);
+	void register(Map<String, Object> map);
+	MemberVo login(String id);
+}

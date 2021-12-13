@@ -1,0 +1,64 @@
+package com.rakki.service;
+
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.rakki.domain.BuyVo;
+import com.rakki.domain.SellVo;
+
+import lombok.Setter;
+import lombok.extern.log4j.Log4j;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
+@Log4j
+public class SellBuyServiceTests {
+	@Setter @Autowired
+	private SellBuyService service;
+	
+	@Test
+	public void testExist(){
+		assertNotNull(service);
+		log.info(service);
+	}
+	
+	@Test  //getBuyPriceList
+	public void testGetBuyPriceList() {
+		log.info(service.getBuyPriceList(361L));
+	}
+	@Test
+	public void testGetSellPriceList() {
+		log.info(service.getSellPriceList(361L));
+	}
+	@Test
+	public void testGetSellCheck() {
+		log.info(service.getSellCheck(361L));
+	}
+	@Test
+	public void testGetSellConfirm() {
+		log.info(service.getSellConfirm(361L, "265"));
+	}
+	
+	@Test
+	public void testModify_sell() {
+		SellVo sell = new SellVo();
+		
+		log.info(service.modify_sell(sell));
+	}
+	
+	@Test
+	public void testModify_buy() {
+		BuyVo buy = new BuyVo();
+		log.info(service.modify_buy(buy));
+	}
+	
+	
+	
+	
+	
+}

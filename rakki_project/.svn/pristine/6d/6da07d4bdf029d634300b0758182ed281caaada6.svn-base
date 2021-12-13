@@ -1,0 +1,12 @@
+package com.rakki.service;
+
+import com.rakki.domain.MemberVo;
+
+public interface MemberService {
+	/* 김우성
+	 * 회원가입 메서드
+	 * 2021-10-26
+	 * */
+	void register(MemberVo vo) throws Exception;
+	MemberVo read(String id);
+}

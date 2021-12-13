@@ -1,0 +1,202 @@
+package com.rakki.controller;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+import javax.annotation.security.PermitAll;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.rakki.domain.AuthVo;
+import com.rakki.domain.MemberVo;
+import com.rakki.service.MemberService;
+import com.rakki.service.MemberServiceImpl;
+
+import lombok.Setter;
+import lombok.extern.log4j.Log4j;
+
+@Controller @Log4j
+@RequestMapping("/common/*")
+public class CommonController {
+	@Autowired @Setter @Qualifier("BCryptPasswordEncoder")
+	private PasswordEncoder encoder;
+	@Autowired
+	private MemberService memberService;
+	@Autowired
+	private MemberServiceImpl impl;
+	
+	MemberVo membervo;
+	
+	
+	// 로그인
+	@GetMapping("login")
+	public String login(String error, String logout, Model model) {
+		log.info("error : " + error);
+		log.info("logout : " + logout);
+		
+		
+		if(error != null) {
+			model.addAttribute("error", "Login error check your account");
+		}
+		if(logout != null) {
+			model.addAttribute("logout", "logout");
+		}
+		return "/common/login";
+	}
+//	@PostMapping("login")
+//	public String login(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+//		req.setCharacterEncoding("utf-8");
+//		String id = req.getParameter("id");
+//		String pwd = req.getParameter("password");
+//		if(true) {
+//			HttpSession session = req.getSession();
+//			session.setAttribute("member", memberService.login(id));
+//			log.info("로그인 성공");
+//		} else {
+//			log.info("로그인 실패");
+//		}
+//		
+//		memberService.login(id);
+//		
+//		return "/rakki/main";
+//	}
+	
+	@GetMapping("logout")
+	public void logout(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		req.getSession().invalidate();
+		resp.sendRedirect("/rakki/main");
+	}
+	/* 김우성
+	 * 2021-10-29
+	 * 이용약관 페이지 처리*/
+	@GetMapping("tos")
+	public void tos(){
+		
+	}
+	
+	/* 김우성
+	 * 2021-10-26
+	 * 회원가입 페이지 처리*/
+	@GetMapping("join")
+	public void join(){
+		
+	}
+	/* 김우성
+	 * 2021-10-26
+	 * 회원가입 기능 처리
+	 * (미완)
+	 * */
+	@PostMapping("join")
+	public String join(MemberVo vo) throws Exception {
+		log.info("join");
+		memberService.register(vo);
+		
+		String inputPass = vo.getPassword();
+		String pwd = encoder.encode(inputPass);
+		vo.setPassword(pwd);
+		
+//		memberService.insertAuth(vo.getAuths(),"ROLE_USER");
+		
+		return "redirect:/rakki/main";
+		
+	}
+	
+	
+	/* 김우성
+	 * 2021-10-26
+	 * 마이페이지 페이지 처리*/
+	@GetMapping("mypage")
+	public String myPage() {
+		log.info("마이페이지");
+		
+		return "/common/mypage";
+	}
+	
+	/* 김우성
+	 * 2021-10-28
+	 * 구매내역 페이지 처리*/
+	@GetMapping("buying")
+	public String buying() {
+		log.info("구매내역");
+		
+		return "/common/buying";
+	}
+	
+	/* 김우성
+	 * 2021-10-28
+	 * 판매내역 페이지 처리*/
+	@GetMapping("selling")
+	public String selling() {
+		log.info("판매내역");
+		
+		return "/common/selling";
+	}
+	
+	/* 김우성
+	 * 2021-10-28
+	 * 관심상품 페이지 처리*/
+	@GetMapping("wish")
+	public String wish() {
+		log.info("관심상품");
+		
+		return "/common/wish";
+	}
+	
+	
+	/* 김우성
+	 * 2021-10-28
+	 * 프로필 정보 페이지 처리
+	 * */
+	@GetMapping("userModify")
+	public String userModify() {
+		log.info("프로필 정보");
+		
+		return "/common/userModify";
+	}
+	
+	
+	
+	/* 김우성
+	 * 2021-10-30
+	 * 주소록 페이지 처리*/
+	@GetMapping("address")
+	public String address() {
+		log.info("주소록");
+		
+		return "/common/address";
+	}
+	
+	/*
+	 * @김기락
+	 * 2021-11-02
+	 * 주소록 수정 페이지 연결
+	 */
+	@GetMapping("addressMod")
+	public String addressMod(){
+		log.info("addressMod");
+		return "/common/addressMod";
+	}
+	
+	
+	/* 김우성
+	 * 2021-10-30
+	 * 결제 정보 페이지 처리*/
+	@GetMapping("payment")
+	public String payment() {
+		log.info("결제 정보");
+		
+		return "/common/payment";
+	}
+}

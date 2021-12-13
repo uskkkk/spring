@@ -1,0 +1,52 @@
+package com.rakki.mapper;
+
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.rakki.domain.MemberVo;
+
+import lombok.Setter;
+import lombok.extern.log4j.Log4j;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
+@Log4j
+public class MemberMapperTests {
+	@Autowired @Setter
+	private MemberMapper memberMapper;
+	
+	
+	// 회원가입 기능 테스트
+	@Test
+	public void testRegister() {
+		MemberVo member = new MemberVo();
+		
+		
+		
+		member.setId("testId");
+		member.setPassword("testPassword");
+		member.setEmail("testEmail");
+		member.setName("testName");
+		member.setPhone("testPhone");
+		member.setAdminflag("0");
+		member.setMember_stat("0");
+		
+		memberMapper.register(member);
+		
+		log.info(member);
+	}
+	
+	
+	// 회원 불러오기
+	@Test
+	public void testRead() {
+		MemberVo vo = memberMapper.read("JAVAMAN");
+		log.info(vo);
+//		vo.getAuths().forEach(log::info);
+	}
+}

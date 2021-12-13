@@ -1,0 +1,52 @@
+package com.rakki.service;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.rakki.domain.AuthVo;
+import com.rakki.domain.MemberVo;
+import com.rakki.mapper.MemberMapper;
+
+import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j;
+
+
+@Service
+@Log4j
+@AllArgsConstructor
+public class MemberServiceImpl implements MemberService{
+	MemberMapper memberMapper;
+	
+	
+	
+	@Override
+	public void insertMember(Map<String, Object> member) {
+		memberMapper.insertMember(member);
+	}
+	
+	
+	// 로그인 기능
+	@Override
+	public MemberVo login(String id) throws Exception {
+		return memberMapper.login(id);
+	}
+	
+	// 
+
+	@Override
+	public void insertAuth(Map<String, Object> auth) {
+		memberMapper.insertAuth(auth);
+	}
+//
+//	@Override
+//	public void insertAuth(Map<String, Object> map) {
+//		memberMapper.insertAuth(map);
+//	}
+
+	
+	
+}

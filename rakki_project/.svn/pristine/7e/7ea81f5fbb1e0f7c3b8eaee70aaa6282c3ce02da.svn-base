@@ -1,0 +1,33 @@
+package com.rakki.service;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.rakki.domain.AuthVo;
+import com.rakki.domain.MemberVo;
+import com.rakki.mapper.MemberMapper;
+
+import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j;
+
+
+@Service
+@Log4j
+@AllArgsConstructor
+public class MemberServiceImpl implements MemberService{
+	MemberMapper memberMapper;
+
+	@Override
+	public void register(MemberVo vo) {
+		memberMapper.register(vo);
+	}
+
+	@Override
+	public MemberVo login(String id) throws Exception {
+		return memberMapper.login(id);
+	}
+
+	
+	
+}

@@ -1,0 +1,70 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<jsp:include page="../includes/head.jsp" />
+<style>
+  #noticeTable {
+    width: 90%;
+    border-collapse: collapse;
+  }
+  #noticeTable th{
+    border-bottom: 1px solid #444444;
+    padding: 10px;
+    border-top: none;
+    border-width: 2px;
+  }
+  #noticeTable tbody td{
+  }
+</style>
+</head>
+<body>
+	<div class="site-wrap">
+		<header class="site-navbar" role="banner">
+			<jsp:include page="../includes/header.jsp" />
+		</header>
+		<div class="container">
+
+			<!-- Main Content -->
+            <div id="content">
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h3 class="mb-1 ml-4 mt-4" style="color: black; font-weight: bold;">공지사항</h3>
+                    <hr style="width:1040px;height:2px;border:none;background-color:black;">
+
+                    <!-- DataTales Example -->
+                    <div>
+                        <div class="card-body">
+                        	<form method="post">
+	                        	<div class="form-group">
+									<div style="margin-left: 2px; color: black; font-size: 15px"><fmt:formatDate value="${notice.regDate}" pattern="yy-MM-dd"/></div>
+		                        	<h5 style="color: black;">${notice.title}</h5>
+		                        	<input type="hidden" id="title" name="title" value="${notice.title}">
+	                        	</div>
+	                        	<div class="form-group mt-2">
+		                        	<textarea style="background-color: #f7f7f7; color:black;" rows="20" class="form-control" id="content" name="content" disabled>${notice.content}</textarea>
+		                        	<input type="hidden" id="content" name="content" value="${notice.content}"></input>
+	                        	</div>
+	                        	<a class="btn btn-outline-dark" href="mNoticeList${cri.params}" style="margin-bottom:100px; margin-left:450px; width:150px; border-radius: 8px">목록보기</a>
+                        	</form>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- End of Main Content -->
+		</div>
+		<jsp:include page="../includes/footer.jsp" />
+	</div>
+	<!-- End of Footer -->
+	<jsp:include page="../includes/foot.jsp" />
+</body>
+
+</html>

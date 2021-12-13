@@ -1,0 +1,69 @@
+package com.rakki.mapper;
+
+import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.rakki.domain.PriceListVo;
+import com.rakki.domain.SellVo;
+
+import lombok.Setter;
+import lombok.extern.log4j.Log4j;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
+@Log4j
+public class SellBuyMapperTests {
+
+	@Autowired @Setter
+	private SellBuyMapper mapper;
+	
+	@Test
+	public void testExists() {
+		assertNotNull(mapper);
+		log.info(mapper);
+	}
+	
+	@Test
+	public void testGetBuyPriceList() {
+		log.info(mapper.getBuyPriceList(2L));
+	}
+	
+	@Test
+	public void testSellBuyPriceList() {
+		log.info(mapper.getSellPriceList(2L));
+	}
+	
+	@Test
+	public void testSellCheck() {
+		log.info(mapper.getSellCheck(2L));
+	}
+	
+	@Test
+	public void testSellConfirm() {
+		log.info(mapper.getSellConfirm(2L, "265"));
+	}
+	
+/*	@Test
+	public void testinsertSellGoods() {
+		SellVo sellvo = new SellVo();
+		
+		sellvo.setSeller_goods_no(8L);
+		sellvo.setId("BABAMBA");
+		sellvo.setProduct_no("2");
+		sellvo.setSize_type("255");
+		sellvo.setSell_price(39000L);
+		sellvo.setSell_flg("1");
+		sellvo.setGoods_stat("1");
+		sellvo.setTradeNo(1L);
+		
+		log.info(mapper.insertSellGoods(sellvo));
+	}*/
+	
+
+
+}

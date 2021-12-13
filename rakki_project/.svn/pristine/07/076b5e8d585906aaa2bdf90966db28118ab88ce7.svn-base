@@ -1,0 +1,4 @@
+pj.username=RAKKI
+pj.password=RAKKI
+spy.driver=net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+spy.url=jdbc:log4jdbc:oracle:thin:@db.rakchou.com:1521:xe

@@ -1,0 +1,98 @@
+@CHARSET "UTF-8";
+.wp-table th:first-child, 
+.wp-table td:first-child {
+    padding-left: 20px;
+}
+
+
+.wp-table td, 
+.wp-table th {
+    padding: 10px 10px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.wp-table th {
+    font-weight: bold;
+}
+ 
+.wp-table {
+    font-size: 13px!important;
+    border: 1px solid #ccc;
+    width: 90%;
+    margin: 30px;
+    margin-left: 60px
+}
+#accordionSidebar a:hover {
+  -webkit-transform: scale(1.05);
+     -moz-transform: scale(1.05);
+      -ms-transform: scale(1.05);
+       -o-transform: scale(1.05);
+          transform: scale(1.05);  
+}
+#accordionSidebar a {
+  -webkit-transition: all 0.1s linear;
+          transition: all 0.1s linear;
+          font-weight: bold;
+}
+#dataTable {
+    width: 90%;
+    margin-top: 40px;
+    margin-left: 60px;
+    padding: 10px;
+    margin-top: 40px;
+}
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+#dataTable td{
+	border-bottom:1px solid #CCC; height:20px;
+	padding:10px 0;
+	font-size: 14px 
+}
+#dataTable thead th {
+    background-color: rgba(44, 62, 80, 0.87);
+    color: #fff;
+    font-weight: normal;
+    text-align: center;
+    font-size: 0.92em;
+    color: white;
+}
+#dataTableD {
+    width: 80%;
+    margin-top: 40px;
+    margin-left: 100px;
+    padding: 10px;
+    margin-top: 40px;
+}
+#dataTableD td{
+	border-bottom:1px solid #CCC;
+	padding:5px 0;
+	font-size: 14px 
+}
+#dataTableD thead th {
+    background-color: rgba(44, 62, 80, 0.87);
+    color: #fff;
+    font-weight: normal;
+    text-align: center;
+    font-size: 0.92em;
+    color: white;
+}
+#nav ul{
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+}
+#nav ul li{
+  margin: 0 5px;
+}
+#nav ul li a{
+  padding: 8px 15px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}

@@ -1,0 +1,56 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
+	
+	<!-- start navbar -->
+	<div class="container">
+      <div class="float-right">
+        <div class="site-top-icons">
+         <ul>
+	     	<li><a href="${pageContext.request.contextPath}/common/login"><small>로그인</small></a></li>
+            <li><a href="${pageContext.request.contextPath}/common/tos"><small>회원가입</small></a></li>
+            <li><a href="${pageContext.request.contextPath}/common/mypage"><small>마이페이지</small></a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/mNoticeRegister"><small>고객센터</small></a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/mProductList" style="color: red;"><small>관리자 전용</small></a></li>
+          </ul>
+        </div> 
+      </div>
+    </div>
+      <!-- end navbar -->
+	<div class="site-navbar-top">
+        <div class="container">
+          <div class="row align-items-center">
+			
+			<!-- start search bar -->
+            <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
+              <form action="" class="site-block-top-search">
+                <span class="icon icon-search2"></span>
+                <input type="text" class="form-control border-0" placeholder="Search">
+              </form>
+            </div>
+			<!-- end search bar -->
+			
+			<!-- start site logo -->
+            <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
+              <div class="site-logo">
+                <a href="${pageContext.request.contextPath}/rakki/main" class="js-logo-clone"><img src="${pageContext.request.contextPath}/resources/images/RAKKI-logo-black_1.png" width="200" height="90"></a>
+              </div>
+            </div>
+			<!-- end site logo -->
+			
+			<!-- start icons -->
+            <div class="col-6 col-md-4 order-3 order-md-3 text-right">
+              <div class="site-top-icons">
+                <ul>
+		          <li><a href="${pageContext.request.contextPath}/product/list">SHOP</a></li>
+                  <li><a href="${pageContext.request.contextPath}/common/login">LOGIN</a></li>
+                  <li><a href="${pageContext.request.contextPath}/common/tos">JOIN</a></li>
+                  <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span class="icon-menu"></span></a></li>
+                </ul>
+              </div> 
+            </div>
+			<!-- end icons -->
+          </div>
+        </div>
+      </div> 
+      
+      

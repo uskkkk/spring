@@ -1,0 +1,63 @@
+package com.rakki.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.rakki.domain.Criteria;
+import com.rakki.domain.PageDTO;
+import com.rakki.domain.ProductVo;
+import com.rakki.service.GoodsService;
+import com.rakki.service.ProductService;
+
+import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j;
+
+@Controller
+@Log4j
+@AllArgsConstructor
+@RequestMapping("/admin/*")
+public class AdminComtroller {
+	private ProductService service;
+	private GoodsService service1;
+	
+	@GetMapping("mProductList")
+	public void list(Model model,Criteria cri) {
+		log.info("list page");
+		model.addAttribute("list", service.getList(cri));
+		model.addAttribute("page", new PageDTO(service.getTotal(cri), cri));
+		model.addAttribute("total", service.getTotal(cri));
+	}
+	
+	@GetMapping("mRegisterProduct")
+	public void register(){
+		log.info("registerPage");
+	}
+	
+	@PostMapping("mRegisterProduct")
+	public String register(ProductVo productVo, RedirectAttributes rttr) {
+		log.info("POST register Page");
+		
+		log.info("register::" + productVo);
+		service.register(productVo);
+		log.info("register::" + productVo);
+		rttr.addFlashAttribute("result", productVo.getProduct_no());
+		return "redirect:/admin/mProductList";
+	}
+	
+	@GetMapping("mNoticeRegister")
+	public void noticeRegister(){
+		log.info("noticeRegister");
+	}
+	
+	@GetMapping("mTrade")
+	public void checkTrade(Model model,Criteria cri){
+		log.info("checkTrade");
+		model.addAttribute("list", service1.getList(cri));
+		model.addAttribute("page", new PageDTO(service1.getTotal(cri), cri));
+		model.addAttribute("total", service1.getTotal(cri));
+	}
+}

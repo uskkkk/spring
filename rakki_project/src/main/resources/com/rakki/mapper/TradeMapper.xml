@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rakki.mapper.TradeMapper">
+	<select id="getOnTradeList" resultType="trade">
+		SELECT T.TRADENO, S.ID SELLER_ID, B.ID BUYER_ID , TO_CHAR(S.PRICE, '999,999,999') PRICE, T.TRADE_DATE, T.BUY_STAT, T.SELL_STAT 
+		FROM TBL_TRADE T 
+		LEFT OUTER JOIN TBL_GOODS S ON T.SELLER_GOODS_NO = S.GOODS_NO
+		LEFT OUTER JOIN TBL_GOODS B ON T.BUYER_GOODS_NO = B.GOODS_NO
+		ORDER BY TRADENO
+	</select>
+	
+	<select id="getListWithPaging" resultType="trade">
+		SELECT TRADENO, SELLER_ID, BUYER_ID , 
+		PRICE, TRADE_DATE, BUY_STAT, SELL_STAT 
+		FROM
+		(
+			SELECT  
+				/*+ INDEX_DESC(TBL_TRADE PK_TRADE) */
+				ROWNUM RN,T.TRADENO, S.ID SELLER_ID, B.ID BUYER_ID , 
+				TO_CHAR(S.PRICE, '999,999,999') PRICE, T.TRADE_DATE, T.BUY_STAT, T.SELL_STAT 
+			FROM 
+				TBL_TRADE T
+			LEFT OUTER JOIN TBL_GOODS S ON T.SELLER_GOODS_NO = S.GOODS_NO
+			LEFT OUTER JOIN TBL_GOODS B ON T.BUYER_GOODS_NO = B.GOODS_NO
+			WHERE 
+				<include refid="cri" />			
+				ROWNUM &lt;= #{pageNum} * #{amount}
+			ORDER BY TRADENO
+		)
+		WHERE RN > (#{pageNum} - 1) * #{amount} 
+	</select>
+	
+	<select id="getTotalCount" resultType="int">
+		SELECT COUNT(*) FROM TBL_TRADE WHERE
+		<include refid="cri" />		 
+		TRADENO > 0
+	</select>	
+	
+	<update id="sellStatUpdate">
+	UPDATE TBL_TRADE SET
+	SELL_STAT = #{sell_stat} 
+	WHERE TRADENO = #{tradeNo}
+	</update>
+	
+	<update id="buyStatUpdate">
+	UPDATE TBL_TRADE SET
+	BUY_STAT = #{buy_stat} 
+	WHERE TRADENO = #{tradeNo}
+	</update>
+	
+	<sql id="cri">
+		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+			<foreach collection="typeArr" item="type">
+				<trim  prefix="OR">
+					<choose>
+						<when test="type == 'B'.toString()">
+							BRAND LIKE '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'M'.toString()">
+							CONTENT SEREALNO '%${keyword}%'
+						</when>
+						<when test="type == 'E'.toString()">
+							NAME_EN LIKE '%${keyword}%'
+						</when>
+						<when test="type == 'K'.toString()">
+							NAME_KO LIKE '%${keyword}%'
+						</when>
+					</choose>
+				</trim>
+			
+			</foreach>
+		</trim>	
+	</sql>		
+	
+</mapper>

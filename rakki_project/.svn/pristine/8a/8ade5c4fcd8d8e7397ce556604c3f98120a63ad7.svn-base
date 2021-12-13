@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rakki.mapper.PaymentMapper">
+
+	<select id="getList" resultType="payment">
+		SELECT PAYMENT_NO, MEMBER_NO MNO, BANK, ACCOUNT_NUM, CREDIT_NUM FROM TBL_PAYMENT WHERE MEMBER_NO = #{MNO}
+	</select>
+	
+	<insert id="insert">
+		<selectKey order="BEFORE" keyProperty="payment_no" resultType="int">
+			SELECT SEQ_PAYMENT.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO TBL_PAYMENT (PAYMENT_NO, MEMBER_NO, BANK, ACCOUNT_NUM,CREDIT_NUM) VALUES 
+		(#{payment_no},#{mno},#{bank},#{account_num},#{credit_num})
+	</insert>
+	
+	<select id="read" resultType="payment">
+		SELECT PAYMENT_NO, MEMBER_NO MNO, BANK, ACCOUNT_NUM, CREDIT_NUM FROM TBL_PAYMENT WHERE PAYMENT_NO = #{payment_no}
+	</select>
+	
+	<delete id="delete">
+		DELETE TBL_PAYMENT WHERE PAYMENT_NO = #{payment_no}
+	</delete>
+	
+	<delete id="update">
+		UPDATE TBL_PAYMENT SET BANK=#{bank}, ACCOUNT_NUM= #{account_num}, CREDIT_NUM= #{credit_num} WHERE PAYMENT_NO = #{payment_no}
+	</delete>
+</mapper>

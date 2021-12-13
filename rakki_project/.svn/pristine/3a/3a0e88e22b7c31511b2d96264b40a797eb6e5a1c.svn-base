@@ -1,0 +1,10 @@
+package com.rakki.mapper;
+
+import java.util.Map;
+
+import com.rakki.domain.MemberVo;
+
+public interface MemberMapper {
+	public void register (MemberVo member);
+	public MemberVo read(String id);
+}

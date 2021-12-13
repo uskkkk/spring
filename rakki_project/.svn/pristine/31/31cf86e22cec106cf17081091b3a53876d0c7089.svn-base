@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rakki.mapper.ProductMapper">
+
+	<select id="getLastPno" resultType="String">
+	SELECT PRODUCT_NO 
+	FROM(
+		    SELECT * 
+		    FROM TBL_PRODUCT
+		    ORDER BY ROWNUM DESC
+		)
+	WHERE ROWNUM = 1
+	</select>
+	
+	<select id="getList" resultType="product">
+		SELECT PRODUCT_NO,CASE CATEGORY WHEN '1' THEN '스니커' ELSE '의류' END CATEGORY ,BRAND,SERIALNO,NAME_EN,NAME_KO,RELEASE FROM TBL_PRODUCT WHERE PRODUCT_NO > 0
+	</select>
+	
+	<select id="getListWithPaging" resultType="product">
+		SELECT PRODUCT_NO,CASE CATEGORY WHEN '1' THEN '스니커' ELSE '의류' END CATEGORY ,BRAND,SERIALNO,NAME_EN,NAME_KO,RELEASE,IMAGE,
+		 (SELECT MIN(PRICE) FROM TBL_GOODS WHERE STATUS='0' AND GOODS_STAT ='0' AND PRODUCT_NO = a.PRODUCT_NO) BUY_MIN_PRICE 
+		FROM
+		(
+			SELECT  
+				/*+ INDEX_DESC(TBL_PRODUCT PK_PRODUCT) */
+				ROWNUM RN,PRODUCT_NO,CATEGORY,BRAND,SERIALNO,NAME_EN,NAME_KO,RELEASE,IMAGE 
+			FROM 
+				TBL_PRODUCT 
+			WHERE 
+				<include refid="cri" />			
+				ROWNUM &lt;= #{pageNum} * #{amount} 
+		) a
+		WHERE RN > (#{pageNum} - 1) * #{amount} 
+	</select>
+	
+	<select id="getTotalCount" resultType="int">
+		SELECT COUNT(*) FROM TBL_PRODUCT WHERE
+		<include refid="cri" />		 
+		PRODUCT_NO > 0
+	</select>	
+	
+	<sql id="cri">
+		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+			<foreach collection="typeArr" item="type">
+				<trim  prefix="OR">
+					<choose>
+						<when test="type == 'B'.toString()">
+							BRAND LIKE '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'M'.toString()">
+							CONTENT SEREALNO '%${keyword}%'
+						</when>
+						<when test="type == 'E'.toString()">
+							NAME_EN LIKE '%${keyword}%'
+						</when>
+						<when test="type == 'K'.toString()">
+							NAME_KO LIKE '%${keyword}%'
+						</when>
+						<when test="type == 'C'.toString()">
+							CATEGORY = '${keyword}'
+						</when>
+					</choose>
+				</trim>
+			
+			</foreach>
+		</trim>	
+	</sql>		
+	
+	<insert id="insertSelectKey">
+		<selectKey order="BEFORE" keyProperty="product_no" resultType="Long">
+			SELECT SEQ_PRODUCT.NEXTVAL FROM DUAL
+		</selectKey>	
+		INSERT INTO TBL_PRODUCT(PRODUCT_NO, CATEGORY,BRAND,SERIALNO,IMAGE,NAME_KO,NAME_EN,RELEASE,COLOR,PRICE_REL) 
+		VALUES (#{product_no}, #{category},#{brand},#{serialNo},#{image},#{name_ko},#{name_en},#{release},#{color},#{price_rel})
+	</insert>
+	
+	
+	<insert id="insertProduct" >
+		INSERT INTO TBL_PRODUCT(PRODUCT_NO, CATEGORY,BRAND,SERIALNO,IMAGE,NAME_KO,NAME_EN,RELEASE,COLOR,PRICE_REL) 
+		VALUES (SEQ_PRODUCT.NEXTVAL, #{category},#{brand},#{serialNo},#{image},#{name_ko},#{name_en},#{release},#{color},#{price_rel})
+	</insert>
+
+	<select id="getProductInfo" resultType="product">
+		SELECT PRODUCT_NO,CASE CATEGORY WHEN '1' THEN '스니커' ELSE '의류' END CATEGORY ,BRAND,SERIALNO,IMAGE,NAME_EN,NAME_KO,RELEASE,COLOR,PRICE_REL, 
+			(SELECT PRICE FROM TBL_GOODS WHERE PRODUCT_NO = #{product_no} AND GOODS_NO = (SELECT MAX(GOODS_NO) FROM TBL_GOODS WHERE PRODUCT_NO = #{product_no} AND GOODS_STAT = '1')) TRADE_PRICE,
+			(SELECT MAX(PRICE) FROM TBL_GOODS WHERE STATUS='1' AND GOODS_STAT ='0' AND PRODUCT_NO = #{product_no}) SELL_PRICE,					
+			(SELECT MIN(PRICE) FROM TBL_GOODS WHERE STATUS='0' AND GOODS_STAT ='0' AND PRODUCT_NO = #{product_no}) BUY_PRICE							
+		FROM TBL_PRODUCT WHERE PRODUCT_NO = #{product_no}
+	</select>	
+	
+	<update id="updateImage">
+	UPDATE TBL_PRODUCT
+	SET IMAGE = #{pk}
+	WHERE PRODUCT_NO = #{product_no}
+	</update>
+	
+	<delete id="deleteProduct">
+		DELETE TBL_PRODUCT WHERE PRODUCT_NO = #{product_no}
+	</delete>				
+</mapper>

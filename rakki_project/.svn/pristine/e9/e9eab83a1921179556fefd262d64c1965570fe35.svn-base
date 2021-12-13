@@ -1,0 +1,13 @@
+package com.rakki.mapper;
+
+import java.util.List;
+
+import com.rakki.domain.Criteria;
+import com.rakki.domain.ProductVo;
+
+public interface ProductMapper {
+	List<ProductVo> getList();
+	List<ProductVo> getListWithPaging(Criteria cri);
+	int getTotalCount(Criteria cri);
+	int insertSelectKey(ProductVo productVo);
+}

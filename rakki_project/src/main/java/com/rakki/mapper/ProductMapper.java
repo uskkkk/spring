@@ -1,0 +1,33 @@
+package com.rakki.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.rakki.domain.Criteria;
+import com.rakki.domain.ProductVo;
+
+public interface ProductMapper {
+	List<ProductVo> getList();
+	List<ProductVo> getListWithPaging(Criteria cri);
+	int getTotalCount(Criteria cri);
+	int insertSelectKey(ProductVo productVo);
+	void insertProduct(ProductVo productVo);
+	ProductVo getProductInfo(Long product_no);
+	
+	/*
+	 *  @김기락
+	 *  211102
+	 *  이미지 파일 관련 추가
+	 */
+	// 최근 등록된 제품 product_no 가져옴
+	String getLastPno();
+	// product_no의 image 컬럼 변경
+	void updateImage(@Param("pk") String pk, @Param("product_no") Long product_no);
+	/*
+	 *  @서정목
+	 *  211103
+	 *  등록제품삭제
+	 */
+	void deleteProduct(Long product_no);
+}

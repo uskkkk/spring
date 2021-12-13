@@ -1,0 +1,77 @@
+package com.rakki.mapper;
+
+import static org.junit.Assert.assertNotNull;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.rakki.domain.MemberVo;
+
+import lombok.Setter;
+import lombok.extern.log4j.Log4j;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
+@Log4j
+public class MemberMapperTests {
+	@Autowired @Setter @Qualifier("BCryptPasswordEncoder")
+	private PasswordEncoder encoder;
+	@Autowired @Setter
+	private MemberMapper memberMapper;
+	
+	
+	
+	// 회원 불러오기
+	@Test
+	public void testLogin() {
+		MemberVo vo = memberMapper.login("user1");
+		log.info(vo);
+		vo.getAuths().forEach(log::info);	
+	}
+	
+	// 회원 정보수정(미완)
+	@Test
+	public void testModify() throws Exception {
+		MemberVo vo = memberMapper.login("hr");
+		log.info(vo);
+		log.info(vo.getId());
+		log.info(vo.getMno());
+		log.info(vo.getPassword());
+		log.info(vo.getName());
+		log.info(vo.getPhone());
+		vo.setId("updatetest");
+		vo.setPassword("12341234");
+		vo.setEmail("update@test.com");
+		vo.setName("바꾼이름");
+		vo.setPhone("01012345678");
+		
+		
+		memberMapper.modify(vo);
+		log.info(vo);
+	}
+	
+	//회원 탈퇴
+	@Test @Transactional
+	public void testDelete() {
+//		testDeleteAuth();
+		memberMapper.delete("UPDATETEST");
+		
+	}
+	
+//	@Test
+//	public void testDeleteAuth() {
+//		memberMapper.deleteAuth("user6");
+//	}
+}

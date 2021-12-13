@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rakki.mapper.AddressMapper">
+	<resultMap type="address" id="addressMap">
+		<id property="ano" column="address_no"/>
+		<result property="zip" column="zip"/>
+		<result property="email" column="email"/>
+		<result property="phone" column="phone"/>
+		<collection property="member" resultMap="memberMap"></collection>
+	</resultMap>
+	<resultMap type="member" id="memberMap">
+  		<result property="mno" column="member_no"/>
+  	</resultMap>
+
+	<insert id="insertAddress">
+		INSERT INTO TBL_ADDRESS (ADDRESS_NO,MEMBER_NO,ZIP,ADDRESS1,ADDRESS2)
+		VALUES (seq_address.nextval,<include refid="memberNo"/>,#{zip},#{address1},#{address2})
+	</insert>
+	
+	<sql id="memberNo">
+        SELECT MEMBER_NO 
+        FROM TBL_MEMBER
+        WHERE ID = #{id}
+	</sql>
+</mapper>

@@ -1,0 +1,22 @@
+package com.rakki.service;
+
+import java.util.List;
+import java.util.Map;
+
+import com.rakki.domain.AuthVo;
+import com.rakki.domain.MemberVo;
+
+public interface MemberService {
+	/* 김우성
+	 * 회원가입 메서드
+	 * 2021-10-26
+	 * */
+	void register(MemberVo vo) throws Exception;
+	
+	MemberVo login(String id) throws Exception;
+	
+	void insertMember(Map<String, Object> map);
+	
+
+	void insertAuth(List<AuthVo> auths, String auth);
+}
